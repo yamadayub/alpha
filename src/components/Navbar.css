@@ -1,0 +1,89 @@
+nav {
+    width: 100%;
+    background-color: #0c0c54;
+    color: white;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    position: fixed; /* 追加 */
+    top: 0; /* 追加 */
+    z-index: 1000; /* 追加 */
+    font-size: 16px;
+    font-weight: 400;
+    padding-right: 10px;
+}
+
+nav a {
+    color: white;
+    margin: 10px;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+nav a:hover{
+    color: beige;
+}
+
+nav p {
+    margin-left: 10px;
+}
+
+.logo {
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 8px; /* テキストとの間隔を調整 */
+    margin-left: 0px;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    flex: 1; /* 追加 */
+  }
+  
+  .menu-icon {
+    margin-left: 16px;
+    cursor: pointer;
+  }
+  
+  .nav-right {
+    display: none;
+    /* display: flex; */
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: #7474cc;
+    position: absolute;
+    top: 65px;
+    right: 0;
+    width: 100%;
+    padding: 16px;
+  }
+  
+  @media (min-width: 768px) {
+    .nav-right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .menu-icon {
+    display: none;
+    font-size: 30px;
+    }
+  }
+
+  .menu-icon {
+    font-size: 30px;
+    margin-right: 10px;
+  }
+  
+  .nav-right.open { /* 追加 */
+    display: flex;
+  }
+  
+  
+  
+  

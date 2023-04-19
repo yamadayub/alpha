@@ -1,0 +1,213 @@
+.portfolioCardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-y: auto;
+    max-height: calc(100vh - 70px); /* 画面の高さからFooterの高さを引く */
+    padding-top: 80px; /* 追加 */
+  }
+  
+.portfolioCard {
+background-color: #ffffff;
+box-shadow: 9px 10px 18px -8px #777777;
+border-radius: 5px;
+width: 100%;
+border: solid 1px;
+margin: 10px;
+pointer-events: none;
+}
+
+.cardHeader {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 0px;
+}
+
+.portfolioRank {
+    font-weight: 500;
+    font-size: 20px;
+    background-color: #7474cc;
+    color: white;
+    width: 45px;
+    height: 40px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+  
+.portfolioLink {
+    text-decoration: none;
+    color: #0c406c;
+    font-weight: 500;
+    pointer-events: auto;
+}
+
+.portfolio_detail{
+    display: flex;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.portfolioTickers {
+    display: grid;
+    margin-right: 5px;
+}
+
+.portfolioTickerTable{
+    margin: 0;
+    padding: 0;
+}
+
+
+.portfolio_performance{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.portfolioGrowth{
+    height: 25%;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.portfolioGrowthTable {
+    margin: 0;
+    padding: 0;
+}
+
+.ytdPerformance{
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+}
+
+.portfolioPerformanceDetail{
+    display: flex;
+    height: 75%;
+    margin-top: 5px;
+}
+
+.portfolioPerformanceDetailTable{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Make the table columns equal width */
+.portfolioPerformanceDetailTable th,
+.portfolioPerformanceDetailTable td {
+  width: 33.3333%; /* Divide 100% by the number of columns */
+  text-align: center;
+  vertical-align: middle;
+  border: solid #949494;
+}
+
+.portfolioPeak{
+    margin: 5px;
+}
+
+.portfolioTrough{
+    margin: 5px;
+}
+
+.portfolioMaxDrowDown{
+    margin: 5px;
+}
+
+.portfoliId{
+    margin-right: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: solid
+    /* margin: 5px; */
+  }
+  
+th,
+td {
+    text-align: center;
+    vertical-align: middle;
+    border: solid #949494;
+}
+
+th {
+    background-color: #d4d4e7;
+}
+
+.na_text{
+    color: #949494;
+}
+
+.growthHeader{
+    background-color: #d4d4e7;
+    font-weight: bold;
+}
+
+.ratioText{
+    text-align: right;
+}
+
+.portfolioDetailContainer{
+    padding: 10px;
+}
+
+.portfolioDetailHeader{
+    height: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.portfolioDetailRank{
+    font-weight: 500;
+    font-size: 20px;
+    background-color: #7474cc;
+    color: white;
+    padding: 10px;
+}
+
+.portfolioDetailGrowthTable{
+    margin-left: 10px;
+}
+
+.portfolioDetailGrowthHeader{
+    background-color: #d4d4e7;
+    font-weight: bold;
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 10px;
+    width: 100px;
+}
+
+.portfolioDetailGrowthPerformance{
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.portfolioDetailChart{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.chartImage{
+    width: 100%;
+}
+
+.portfolioDetailPerformanceDetail{
+    margin-top: 10px;
+}
+.portfolioDetailTickers{
+    margin-top: 10px;
+}
+

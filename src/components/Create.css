@@ -1,0 +1,82 @@
+.createPortfolio{
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    width: 100%;
+    border: solid #777777;
+    height: 90vh;
+    overflow-y: scroll; /* 縦スクロールを有効にする */
+}
+
+.formForPortfolio{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.portfolioContainer{
+    background-color: beige;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.portfolioContainer h1 {
+    margin: 10px;
+    /* border: solid #777777; */
+}
+
+.tickerContainer{
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    width: 90%;
+    gap: 10px;
+    padding: 20px;
+    box-shadow: 11px 10px 15px -5px #777777;
+    border: solid #777777;
+    margin: 10px;
+    flex-grow: 1; 
+}
+
+.tickerContainer input {
+    width: 100%;
+    height: 30px;
+    border: solid #777777;
+    outline: none;
+    padding: 0px 4px;
+}
+
+.createTickerButton{
+    /* margin: 10px; */
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 100px;
+}
+
+.createButton{
+    padding: 10px 10px;
+    background-color: rgb(7, 133, 182);
+    box-shadow: 11px 10px 15px -5px #777777;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.createButton:hover{
+    transform: translateY(5px);
+    box-shadow: none;
+}
+
+.error-message{
+    color: red;
+    margin-top: 10px;
+}
