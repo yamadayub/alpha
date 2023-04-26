@@ -6,6 +6,7 @@ import schemas
 from sqlalchemy import and_
 from collections import defaultdict
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import contains_eager
 
 
 def setGrowth(portfolio: models.Portfolio):
@@ -120,9 +121,22 @@ async def getTickerMaster(db: Session):
     ticker_master = schemas.TickerMaster(
         tickers=[])
 
-    result = db.query(models.TickerMaster).all()
+    # result = db.query(models.TickerMaster).all()
+    # TickerPriceテーブルにレコードが存在するTickerMasterを検索
+    result = db.query(models.TickerMaster)\
+        .join(models.TickerPrice)\
+        .options(contains_eager(models.TickerMaster.prices))\
+        .distinct(models.TickerMaster.id)\
+        .all()
+
     for ticker in result:
         print(ticker.ticker)
         ticker_master.tickers.append(ticker.ticker)
 
     return ticker_master
+
+
+async def getPortfolioByUserId(db: Session, user_id: int):
+    portfolios = db.query(models.Portfolio).filter(
+        models.Portfolio.user_id == user_id).all()
+    return portfolios

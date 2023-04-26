@@ -1,6 +1,7 @@
 import datetime as _dt
 import pydantic as _pydantic
 from typing import List
+from typing import Optional
 
 
 class _BasePortfolio(_pydantic.BaseModel):
@@ -55,6 +56,7 @@ class AllPortfoliosDetail(_pydantic.BaseModel):
 
 class PortfolioDetailCreate(_pydantic.BaseModel):
     tickers: List[_BaseTicker]
+    user_id: int = 1
 
     class Config:
         orm_mode = True
@@ -94,6 +96,43 @@ class PortfolioCompositePriceByDate(_pydantic.BaseModel):
 
 class TickerMaster(_pydantic.BaseModel):
     tickers: List
+
+    class Config:
+        orm_mode = True
+
+
+class UserCreate(_pydantic.BaseModel):
+    email: str
+    username: Optional[str] = None
+    password: str
+    avatar_url: Optional[str] = None
+    google_id: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class User(_pydantic.BaseModel):
+    email: str
+    username: Optional[str] = None
+    avatar_url: Optional[str] = None
+    google_id: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class Token(_pydantic.BaseModel):
+    access_token: str
+    token_type: str
+
+    class Config:
+        orm_mode = True
+
+
+class LoginForm(_pydantic.BaseModel):
+    username: str
+    password: str
 
     class Config:
         orm_mode = True

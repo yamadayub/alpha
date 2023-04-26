@@ -143,7 +143,7 @@ function NewPortfolio() {
                   )}
               </div>
               <div className="inputPortfolio">
-                <div>Unit/Unit Ratio</div>
+                <div>Unit</div>
                   <input type="text" placeholder='Unit/Unit Ratio'  value={ticker.ratio} onChange={(e) => onEditTicker(ticker, "ratio", e.target.value)}/>
               </div>
             </div>

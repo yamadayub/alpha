@@ -1,10 +1,23 @@
 from sqlalchemy.orm import Session
+from passlib.context import CryptContext
 
 import models
 import schemas
-from sqlalchemy import select, desc
+from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 import utils
+import hashlib
+
+# パスワードのハッシュ化と検証用のオブジェクトを作成
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+async def get_user_by_username(db: Session, username: str):
+    return db.query(models.User).filter(models.User.username == username).first()
+
+
+def verify_password(plain_password: str, hashed_password: str):
+    return pwd_context.verify(plain_password, hashed_password)
 
 
 async def get_portfolio(db: Session, portfolio_id: int):
@@ -59,7 +72,7 @@ async def get_all_portfolios(db: Session):
 async def create_portfolio(db: Session, portfolio: schemas.PortfolioDetailCreate):
 
     # insert portfolio
-    db_portfolio = models.Portfolio(growth=0.1)
+    db_portfolio = models.Portfolio(growth=0.1, user_id=portfolio.user_id)
     db.add(db_portfolio)
     db.flush()  # データベースに保存してidを発行する
 
@@ -78,3 +91,14 @@ async def create_portfolio(db: Session, portfolio: schemas.PortfolioDetailCreate
 
     print(result.id)
     return result.id
+
+
+async def create_user(db: Session, user: schemas.UserCreate):
+    hashed_password = pwd_context.hash(user.password)
+    db_user = models.User(
+        email=user.email, username=user.username, hashed_password=hashed_password, avatar_url=user.avatar_url, google_id=user.google_id
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user

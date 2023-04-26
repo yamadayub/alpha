@@ -36,6 +36,9 @@ function Nabvar() {
           <Link to="/show" onClick={closeMenu} >
             Search Portfolio
           </Link>
+          <Link to="/login" onClick={closeMenu} >
+            Log In
+          </Link>
         </div>
       )}
     </nav>
