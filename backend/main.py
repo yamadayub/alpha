@@ -1,6 +1,6 @@
 import uvicorn
 from sqlalchemy.orm import Session
-from typing import Annotated
+from typing import Annotated, Optional
 from jose import jwt, JWTError
 import os
 from datetime import datetime as _dt, timedelta
@@ -9,6 +9,9 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from fastapi import Request
+import requests
+import httpx
 
 
 import schemas
@@ -21,6 +24,11 @@ import logging
 
 # ENVファイルからの環境変数読み込み
 load_dotenv()
+
+SECRET_KEY = os.environ["SECRET_KEY"]
+ALGORITHM = os.environ["ALGORITHM"]
+GOOGLE_CLIENT_ID = os.environ["GOOGLE_CLIENT_ID"]
+GOOGLE_CLIENT_SECRET = os.environ["GOOGLE_CLIENT_SECRET"]
 
 # パスワードのハッシュ化関数を定義
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -63,6 +71,59 @@ def get_db():
         db.close()
 
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+oauth2_scheme_optional = OAuth2PasswordBearer(
+    tokenUrl="token", auto_error=False)
+
+
+def get_google_provider_cfg():
+    google_discovery_url = "https://accounts.google.com/.well-known/openid-configuration"
+    response = requests.get(google_discovery_url)
+    if response.status_code != 200:
+        raise HTTPException(
+            status_code=400, detail="Failed to obtain Google provider configuration")
+    return response.json()
+
+
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+) -> models.User:
+    try:
+        payload = jwt.decode(token, SECRET_KEY,
+                             algorithms=[ALGORITHM])
+        user_id = payload.get("sub")
+    except JWTError:
+        raise HTTPException(status_code=400, detail="Invalid token")
+
+    user = await crud.get_user(db, user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
+
+
+async def get_current_user_optional(token: str = Depends(oauth2_scheme_optional), db: Session = Depends(get_db)) -> Optional[models.User]:
+    print("token:", token)
+    if token is None:
+        return None
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print("payload:", payload)
+        username = payload.get("sub")
+    except JWTError as e:
+        print(f"JWTError: {e}")
+        return None
+
+    user = await crud.get_user_by_username(db, username)
+    # print(user)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
+
+
 @app.get("/")
 def Hello():
     return {"Hello": "World!"}
@@ -73,16 +134,32 @@ async def get_all_portfolios(db: Session = Depends(get_db)):
     return await crud.get_all_portfolios(db=db)
 
 
+@app.get("/portfolios/user", response_model=schemas.AllPortfoliosDetail)
+async def read_portfolios_by_user_id(
+    current_user: models.User = Depends(get_current_user),  # 追加
+    db: Session = Depends(get_db),
+):
+    return await crud.get_all_portfolios_by_user_id(db, current_user.id)  # 変更
+
+
 @app.get("/portfolio/{portfolio_id}", response_model=schemas.PortfolioDetail)
 async def get_portfolio_by_id(portfolio_id: int, db: Session = Depends(get_db)):
     return await crud.get_portfolio(db=db, portfolio_id=portfolio_id)
 
 
 @app.post("/portfolio")
-async def post_portfolio(portfolio: schemas.PortfolioDetailCreate, db: Session = Depends(get_db)):
-    data = portfolio.json()
-    print(data)
-    return await crud.create_portfolio(db=db, portfolio=portfolio)
+async def create_portfolio(
+    *,
+    db: Session = Depends(get_db),
+    portfolio: schemas.PortfolioDetailCreate,
+    current_user: Optional[schemas.User] = Depends(get_current_user_optional),
+):
+    # async def create_portfolio(portfolio: schemas.PortfolioDetailCreate, current_user: Optional[models.User] = Depends(get_current_user), db: Session = Depends(get_db),):
+    # ログインしている場合は current_user.id、ログインしていない場合は 1
+    print("current user:", current_user)
+    user_id = current_user.id if current_user else 1
+    # user_id を渡す
+    return await crud.create_portfolio(db=db, portfolio=portfolio, user_id=user_id)
 
 
 @app.put("/portfolio/{id}")
@@ -144,6 +221,57 @@ async def login(form_data: schemas.LoginForm, db: Session = Depends(get_db)):
 
     return {"access_token": access_token, "token_type": "bearer"}
 
+
+@app.post("/auth/google")
+async def google_auth(token: str, db: Session = Depends(get_db)):
+    user = await crud.authenticate_google_user(db, token)
+
+    if user is None:
+        raise HTTPException(
+            status_code=400, detail="Google authentication failed")
+
+    access_token = create_access_token(data={"sub": user.username})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get("/auth/google/callback")
+async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
+    # 認証コードを取得
+    code = request.query_params.get("code")
+
+    if not code:
+        raise HTTPException(
+            status_code=400, detail="Missing authentication code")
+
+    # 認証コードを使ってアクセストークンとIDトークンを取得
+    google_provider_cfg = get_google_provider_cfg()
+    token_endpoint = google_provider_cfg["token_endpoint"]
+
+    token_data = {
+        "client_id": GOOGLE_CLIENT_ID,
+        "client_secret": GOOGLE_CLIENT_SECRET,
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": "http://127.0.0.1:8000/auth/google/callback",
+    }
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    token_response = request.post(
+        token_endpoint, data=token_data, headers=headers)
+
+    if token_response.status_code != 200:
+        raise HTTPException(
+            status_code=400, detail="Failed to obtain access token")
+
+    token_response_json = token_response.json()
+    id_token = token_response_json["id_token"]
+
+    # IDトークンを使ってユーザーを認証
+    user = crud.authenticate_google_user(db, id_token)
+
+    if user is None:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    return {"user_id": user.id}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
