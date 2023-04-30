@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 const GoogleLoginButton = () => {
-  const clientId = '346461362462-s5icpg6082vse9pjh9ag6vq7jkrqor1q.apps.googleusercontent.com';
+  const clientId = '346461362462-a9jcr27ncm2f47v902t26j9vqo6hb82u.apps.googleusercontent.com';
 
   useEffect(() => {
     window.google.accounts.id.initialize({

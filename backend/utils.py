@@ -121,16 +121,13 @@ async def getTickerMaster(db: Session):
     ticker_master = schemas.TickerMaster(
         tickers=[])
 
-    # result = db.query(models.TickerMaster).all()
-    # TickerPriceテーブルにレコードが存在するTickerMasterを検索
     result = db.query(models.TickerMaster)\
-        .join(models.TickerPrice)\
-        .options(contains_eager(models.TickerMaster.prices))\
-        .distinct(models.TickerMaster.id)\
+        .join(models.TickerPrice, models.TickerMaster.ticker == models.TickerPrice.ticker)\
+        .distinct()\
         .all()
 
     for ticker in result:
-        print(ticker.ticker)
+        # print(ticker.ticker)
         ticker_master.tickers.append(ticker.ticker)
 
     return ticker_master

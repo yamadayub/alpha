@@ -56,7 +56,7 @@ class AllPortfoliosDetail(_pydantic.BaseModel):
 
 class PortfolioDetailCreate(_pydantic.BaseModel):
     tickers: List[_BaseTicker]
-    user_id: int = 1
+    user_id: int
 
     class Config:
         orm_mode = True
@@ -125,13 +125,14 @@ class User(_pydantic.BaseModel):
 class Token(_pydantic.BaseModel):
     access_token: str
     token_type: str
+    user_id: int  # user_id を追加
 
     class Config:
         orm_mode = True
 
 
 class LoginForm(_pydantic.BaseModel):
-    username: str
+    email: str
     password: str
 
     class Config:

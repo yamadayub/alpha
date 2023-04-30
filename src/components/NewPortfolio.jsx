@@ -14,6 +14,7 @@ function NewPortfolio() {
   const [availableTickers, setAvailableTickers] = useState([]);
   const [inputText, setInputText] = useState(''); // 追加
   const navigate = useNavigate();
+  const user_id = localStorage.getItem('user_id') || 1;
 
   // TickerMasterからtickersリストを取得する関数
   const fetchTickers = async () => {
@@ -22,7 +23,7 @@ function NewPortfolio() {
       const response = await fetch(getTickerMasterURL);
       const data = await response.json();
       setAvailableTickers(data.tickers);
-      console.log(availableTickers);
+      // console.log(availableTickers);
     } catch (error) {
       console.error('Error fetching tickers:', error);
     }
@@ -32,6 +33,10 @@ function NewPortfolio() {
   useEffect(() => {
     fetchTickers();
   }, []);
+
+  useEffect(() => {
+    console.log(availableTickers);
+  }, [availableTickers]);
 
   const addTicker = () => {
     console.log("add ticker pressed")
@@ -96,9 +101,9 @@ function NewPortfolio() {
 
     try {
       const url = 'http://127.0.0.1:8000/portfolio';
-      
+      const userIdAsInt = parseInt(user_id, 10);
       const tickers_wo_id = tickers.map(({ id, ...rest }) => rest);
-      const response = await createPortfolio(url, tickers_wo_id);
+      const response = await createPortfolio(url, tickers_wo_id, userIdAsInt);
       setSuccessMessage('Portfolio created successfully!');
       setErrorMessage('');
       navigate(`/portfolio/${response}`);

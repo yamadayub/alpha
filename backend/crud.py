@@ -30,15 +30,15 @@ async def get_user_by_username(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
 
 
-def get_user_by_user_id(db: Session, user_id: int) -> Optional[models.User]:
+async def get_user_by_user_id(db: Session, user_id: int) -> Optional[models.User]:
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
-def get_user_by_user_email(db: Session, email: str) -> Optional[models.User]:
+async def get_user_by_user_email(db: Session, email: str) -> Optional[models.User]:
     return db.query(models.User).filter(models.User.email == email).first()
 
 
-def get_user_id_from_token(token: str, db: Session) -> Optional[int]:
+async def get_user_id_from_token(token: str, db: Session) -> Optional[int]:
     try:
         payload = jwt.decode(token, SECRET_KEY,
                              algorithms=[ALGORITHM])
@@ -146,6 +146,7 @@ async def create_portfolio(db: Session, portfolio: schemas.PortfolioDetailCreate
     db_portfolio = models.Portfolio(growth=0.1, user_id=user_id)
     db.add(db_portfolio)
     db.flush()  # データベースに保存してidを発行する
+    print(db_portfolio)
 
     # insert tickers
     for ticker in portfolio.tickers:
@@ -153,6 +154,7 @@ async def create_portfolio(db: Session, portfolio: schemas.PortfolioDetailCreate
             ticker=ticker.ticker, ratio=ticker.ratio, portfolio_id=db_portfolio.id
         )
         db.add(db_ticker)
+        print(db_ticker)
 
     # commit
     db.commit()

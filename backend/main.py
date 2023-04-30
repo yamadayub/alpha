@@ -55,8 +55,6 @@ app.add_middleware(
 )
 
 # 環境変数設定
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
@@ -92,11 +90,12 @@ async def get_current_user(
     try:
         payload = jwt.decode(token, SECRET_KEY,
                              algorithms=[ALGORITHM])
-        user_id = payload.get("sub")
+        email = payload.get("sub")  # ここで、email を取得
     except JWTError:
         raise HTTPException(status_code=400, detail="Invalid token")
 
-    user = await crud.get_user(db, user_id)
+    # ここで get_user_by_user_email を呼び出す
+    user = await crud.get_user_by_user_email(db, email)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -154,12 +153,9 @@ async def create_portfolio(
     portfolio: schemas.PortfolioDetailCreate,
     current_user: Optional[schemas.User] = Depends(get_current_user_optional),
 ):
-    # async def create_portfolio(portfolio: schemas.PortfolioDetailCreate, current_user: Optional[models.User] = Depends(get_current_user), db: Session = Depends(get_db),):
-    # ログインしている場合は current_user.id、ログインしていない場合は 1
-    print("current user:", current_user)
-    user_id = current_user.id if current_user else 1
+
     # user_id を渡す
-    return await crud.create_portfolio(db=db, portfolio=portfolio, user_id=user_id)
+    return await crud.create_portfolio(db=db, portfolio=portfolio, user_id=portfolio.user_id)
 
 
 @app.put("/portfolio/{id}")
@@ -195,9 +191,9 @@ def create_access_token(data: dict, expires_delta: timedelta):
     return encoded_jwt
 
 
-@app.post("/users/", response_model=schemas.User)
+@app.post("/sign_up", response_model=schemas.User)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = await crud.get_user_by_username(db, username=user.username)
+    db_user = await crud.get_user_by_user_email(db, email=user.email)
     print(f"db_user: {db_user}")
     if db_user:
         raise HTTPException(status_code=400, detail="Username already in use")
@@ -205,9 +201,9 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return schemas.User.from_orm(db_user)  # この行を追加
 
 
-@app.post("/token", response_model=schemas.Token)
+@app.post("/sign_in", response_model=schemas.Token)
 async def login(form_data: schemas.LoginForm, db: Session = Depends(get_db)):
-    user = await crud.get_user_by_username(db, username=form_data.username)
+    user = await crud.get_user_by_user_email(db, email=form_data.email)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Incorrect username or password", headers={"WWW-Authenticate": "Bearer"})
@@ -217,9 +213,15 @@ async def login(form_data: schemas.LoginForm, db: Session = Depends(get_db)):
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires)
+        data={"sub": user.email}, expires_delta=access_token_expires)
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    # user_id を含めたレスポンスデータを返す
+    return {"access_token": access_token, "token_type": "bearer", "user_id": user.id}
+
+
+@app.get("/user/me", response_model=schemas.User)
+async def get_user_info(current_user: models.User = Depends(get_current_user)):
+    return current_user
 
 
 @app.post("/auth/google")

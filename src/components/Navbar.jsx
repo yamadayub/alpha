@@ -36,8 +36,17 @@ function Nabvar() {
           <Link to="/show" onClick={closeMenu} >
             Search Portfolio
           </Link>
+          <Link to="/auth" onClick={closeMenu} >
+            Auth
+          </Link>
+          <Link to="/sign_up" onClick={closeMenu} >
+            Sign Up
+          </Link>
           <Link to="/sign_in" onClick={closeMenu} >
-            Log In
+            Sign In
+          </Link>
+          <Link to="/my_page" onClick={closeMenu} >
+            My Page
           </Link>
         </div>
       )}

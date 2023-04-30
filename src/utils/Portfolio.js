@@ -16,9 +16,15 @@ export const getOnePortfolio = (url) => {
     })
 };
 
-export const createPortfolio = (url, tickers) => {
-    console.log(tickers)
-    return axios.post(url, { tickers: tickers })
+export const createPortfolio = (url, tickers, user_id) => {
+    console.log("Sending request to:", url);
+    console.log("Payload:", { tickers, user_id });
+    
+    const payload = {
+        tickers: tickers,
+        user_id: user_id
+      };
+    return axios.post(url, payload)
       .then((response) => response.data)
       .catch((error) => {
         throw new Error(error.message);
