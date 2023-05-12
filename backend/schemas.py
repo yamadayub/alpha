@@ -54,6 +54,27 @@ class AllPortfoliosDetail(_pydantic.BaseModel):
         orm_mode = True
 
 
+class MyPortfolioDetail(_pydantic.BaseModel):
+    id: int = 0
+    growth: float = 0
+    latest_performance: float = 0.123
+    peak: float = 0.234
+    trough: float = -0.123
+    max_drow_down: float = -0.234
+    is_primary: bool = False
+    tickers: List[Ticker] = []
+
+    class Config:
+        orm_mode = True
+
+
+class MyAllPortfoliosDetail(_pydantic.BaseModel):
+    portfolios: List[MyPortfolioDetail] = []
+
+    class Config:
+        orm_mode = True
+
+
 class PortfolioDetailCreate(_pydantic.BaseModel):
     tickers: List[_BaseTicker]
     user_id: int
@@ -113,6 +134,7 @@ class UserCreate(_pydantic.BaseModel):
 
 
 class User(_pydantic.BaseModel):
+    id: int
     email: str
     username: Optional[str] = None
     avatar_url: Optional[str] = None

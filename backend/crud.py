@@ -106,6 +106,9 @@ async def get_all_portfolios_by_user_id(db: Session, user_id: int):
     result = db.query(models.Portfolio).options(
         joinedload(models.Portfolio.tickers)).filter(models.Portfolio.user_id == user_id).all()
 
+    print(user_id)
+    print(result)
+
     portfolios_detail = []
     for portfolio in result:
         tickers = []
@@ -119,7 +122,7 @@ async def get_all_portfolios_by_user_id(db: Session, user_id: int):
         top_3_tickers = sorted_tickers[:3]
 
         portfolio_detail = models.Portfolio(
-            id=portfolio.id, growth=portfolio.growth, date_created=portfolio.date_created, tickers=top_3_tickers)
+            id=portfolio.id, growth=portfolio.growth, date_created=portfolio.date_created, tickers=top_3_tickers, is_primary=portfolio.is_primary)
 
         # growthを上書き
         portfolio_detail.growth = utils.setGrowth(portfolio_detail)
@@ -133,8 +136,9 @@ async def get_all_portfolios_by_user_id(db: Session, user_id: int):
         portfolio_detail.max_drow_down = portfolo_performance_detail.max_drow_down
 
         portfolios_detail.append(portfolio_detail)
+        print("Portfolios:", portfolios_detail)
 
-    all_portfolios_detail = schemas.AllPortfoliosDetail(
+    all_portfolios_detail = schemas.MyAllPortfoliosDetail(
         portfolios=portfolios_detail)
 
     return all_portfolios_detail

@@ -14,7 +14,7 @@ Session = sessionmaker(bind=engine)
 
 def main():
     start = datetime(2022, 4, 27)
-    end = datetime(2023, 4, 27)
+    end = datetime(2023, 5, 1)
 
     session = Session()
     tickers = session.query(models.TickerMaster.ticker).all()

@@ -1,3 +1,4 @@
+import models
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -7,7 +8,6 @@ from sqlalchemy.schema import MetaData
 from sqlalchemy import text
 
 from alembic import context
-import models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -27,6 +27,8 @@ custom_schema = 'public'
 config.set_main_option(
     'sqlalchemy.url', f"{config.get_main_option('sqlalchemy.url')}?options=-csearch_path={custom_schema}")
 
+print(models)
+print(models.Base.metadata)
 target_metadata = models.Base.metadata
 target_metadata.schema = custom_schema
 
@@ -75,6 +77,8 @@ def run_migrations_online() -> None:
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
+
+    print(connectable)
 
     with connectable.connect() as connection:
         with connection.begin():

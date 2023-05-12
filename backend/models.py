@@ -18,8 +18,7 @@ class Portfolio(_database.Base):
     date_updated = _sql.Column(_sql.DateTime, default=_dt.datetime.now(
     ), onupdate=_dt.datetime.now())
     user_id = _sql.Column(_sql.Integer, ForeignKey("users.id"), index=True)  # 追加
-
-    user = relationship("User", backref="portfolios")  # Userモデルとのリレーション
+    is_primary = _sql.Column(_sql.Boolean, default=False)  # 新しいカラム
 
 
 class Ticker(_database.Base):
@@ -80,4 +79,6 @@ class User(_database.Base):
     hashed_password = _sql.Column(String)
     avatar_url = _sql.Column(_sql.String)
     google_id = _sql.Column(_sql.String, unique=True, index=True)  # Googleから提供される固有のID
-    # 必要に応じて、他のカラム（例: facebook_id）を追加できます。
+    is_active = _sql.Column(_sql.Boolean(), default=True)
+    is_superuser = _sql.Column(_sql.Boolean(), default=False)
+

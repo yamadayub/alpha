@@ -134,6 +134,8 @@ async def getTickerMaster(db: Session):
 
 
 async def getPortfolioByUserId(db: Session, user_id: int):
+    print("Utils function-User ID:", user_id)
     portfolios = db.query(models.Portfolio).filter(
         models.Portfolio.user_id == user_id).all()
+    print("Utils function-portfolio data:", portfolios)
     return portfolios

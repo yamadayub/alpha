@@ -96,6 +96,7 @@ async def get_current_user(
 
     # ここで get_user_by_user_email を呼び出す
     user = await crud.get_user_by_user_email(db, email)
+    print(user.id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -175,7 +176,8 @@ async def get_portfolio_price_data_by_id(portfolio_id: int, db: Session = Depend
 
 @app.get("/portfolios/{user_id}")
 async def get_portfolios_by_user_id(user_id: int, db: Session = Depends(get_db)):
-    return await utils.getPortfolioByUserId(db=db, user_id=user_id)
+    print("Endpoint function-User ID:", user_id)
+    return await crud.get_all_portfolios_by_user_id(db=db, user_id=user_id)
 
 
 @app.get("/ticker_list")
