@@ -1,12 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./Navbar.css"
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faTimes, faSquarePlus, faChartPie } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/logo/logo_transparent_cut.png'; 
 
+const get_user_url = 'http://127.0.0.1:8000/user/me';
+
 function Nabvar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('access_token');
+      console.log(token)
+      const response = await fetch(get_user_url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      console.log(response)
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("userData:", userData)
+        setUser(userData);
+      } else {
+        console.error('Error fetching user data:', response.status, response.statusText);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -33,21 +60,27 @@ function Nabvar() {
           <Link to="/new" onClick={closeMenu} >
             Add A New Portfolio
           </Link>
-          <Link to="/show" onClick={closeMenu} >
-            Search Portfolio
-          </Link>
-          <Link to="/auth" onClick={closeMenu} >
-            Auth
-          </Link>
+          {!user?
           <Link to="/sign_up" onClick={closeMenu} >
             Sign Up
           </Link>
+          :
+          <></>
+          }
+          {!user?
           <Link to="/sign_in" onClick={closeMenu} >
             Sign In
           </Link>
-          <Link to="/my_page" onClick={closeMenu} >
-            My Page
-          </Link>
+          :
+          <></>
+          }
+          {user?
+            <Link to="/my_page" onClick={closeMenu} >
+              My Page
+            </Link> 
+            : 
+            <></>
+          }
         </div>
       )}
     </nav>

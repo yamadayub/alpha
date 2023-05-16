@@ -6,6 +6,9 @@ import './Portfolio.css'
 import chart from '../assets/chart.jpg'; 
 import pie_chart from '../assets/pie_chart.jpeg'; 
 import { Line } from 'react-chartjs-2';
+import { Link } from 'react-router-dom'
+
+const get_user_url = 'http://127.0.0.1:8000/user/me';
 
 function ShowPortfolio() {
   const { portfolio_id } = useParams();
@@ -14,6 +17,7 @@ function ShowPortfolio() {
   const [portfolioData, setPortfolioData] = useState(null);
   const [portfolioPerformanceData, setPortfolioPerformanceData] = useState(null);
   const [chartData, setChartData] = useState(null);
+  const [user, setUser] = useState(null);
   
   useEffect(()=>{   
     const fetchData = async () => {
@@ -49,6 +53,30 @@ function ShowPortfolio() {
       console.log(portfolioPerformanceData);
     }
   }, [portfolioPerformanceData]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('access_token');
+      console.log(token)
+      const response = await fetch(get_user_url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      console.log(response)
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("userData:", userData)
+        setUser(userData);
+      } else {
+        console.error('Error fetching user data:', response.status, response.statusText);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   if (!portfolioData) {
     return <div>Loading...</div>
@@ -159,7 +187,16 @@ function ShowPortfolio() {
             })}
           </tbody>
         </table>
-        </div>
+      </div>
+
+      {user?
+        <Link to={`/comparison/${portfolio_id}`}>
+          <div className="compareButton">Compare with my portfolio</div>
+        </Link>
+        : 
+        <></>
+      }
+
     </div>
   )
 }

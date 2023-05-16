@@ -203,3 +203,17 @@ async def authenticate_google_user(db: Session, token: str):
     except ValueError as e:
         print(e)
         return None
+
+
+async def set_primary_portfolio(db: Session, user_id: int, portfolio_id: int):
+    # 1. user_idに紐づくportfolioデータをデータベースから取得する
+    portfolios = db.query(models.Portfolio).filter(
+        models.Portfolio.user_id == user_id).all()
+
+    # 2. portfolio_idに一致するportfolioはis_primaryにTrueを設定し、それ以外にはFalseを設定する
+    for portfolio in portfolios:
+        portfolio.is_primary = portfolio.id == portfolio_id
+        print(portfolio.id, ":", portfolio.is_primary)
+
+    # 3. データベースを更新する
+    db.commit()

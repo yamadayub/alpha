@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 // import { portfolioCards } from "./Portfolio"
 import { Link } from "react-router-dom"
 import { getAllPortfolios } from "../utils/Portfolio"
+import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined'
 import './Portfolio.css'
 
 
@@ -28,7 +29,7 @@ function Home() {
             <div className='cardHeader'>
               <div className='portfolioRank'>{index + 1}</div>
               <Link to={`/portfolio/${portfolio.id}`} className='portfolioLink'>
-                <div className='portfoliId'>Detail</div>
+                <div className='portfoliId'>Detail <ArrowCircleRightOutlinedIcon/></div>
               </Link>
             </div>
             <div className="portfolio_detail">
@@ -38,7 +39,7 @@ function Home() {
                     <tr>
                       <th>#</th>
                       <th>Ticker</th>
-                      <th>Ratio</th>
+                      <th>Unit</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -8,6 +8,7 @@ import AuthPage from './components/AuthPage';
 import SignUpPage from './components/SignUpPage';
 import SignInPage from './components/SignInPage';
 import MyPage from './components/MyPage'
+import Comparison from './components/Comparison'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/sign_up" element={<SignUpPage/>}></Route>
           <Route path="/sign_in" element={<SignInPage/>}></Route>
           <Route path="/my_page" element={<MyPage/>}></Route>
+          <Route path="/comparison/:portfolio_id" element={<Comparison/>}></Route>
         </Routes>
         <Footer/>
       </Router>

@@ -180,6 +180,15 @@ async def get_portfolios_by_user_id(user_id: int, db: Session = Depends(get_db))
     return await crud.get_all_portfolios_by_user_id(db=db, user_id=user_id)
 
 
+@app.post("/portfolio/{portfolio_id}/primary/{user_id}")
+async def set_primary_portfolio(user_id: int, portfolio_id: int, db: Session = Depends(get_db)):
+    print("Endpoint function-User ID:", user_id)
+    print("Endpoint function-Portfolio ID:", portfolio_id)
+    await crud.set_primary_portfolio(
+        db=db, user_id=user_id, portfolio_id=portfolio_id)
+    return await crud.get_all_portfolios_by_user_id(db=db, user_id=user_id)
+
+
 @app.get("/ticker_list")
 async def get_ticker_master(db: Session = Depends(get_db)):
     return await utils.getTickerMaster(db=db)

@@ -8,6 +8,20 @@ export const getAllPortfolios = (url) => {
     })
 };
 
+export const getAllPortfoliosWithUserID = async (url) => {
+    const token = localStorage.getItem('access_token');
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          })
+        .then((res) => res.json())
+        .then((data) => resolve(data));
+    })
+  };
+
 export const getOnePortfolio = (url) => {
     return new Promise((resolve, reject) => {
         fetch(url)
@@ -29,12 +43,20 @@ export const createPortfolio = (url, tickers, user_id) => {
       .catch((error) => {
         throw new Error(error.message);
       });
-  };
+};
 
-  export const getOnePortfolioPriceData = (url) => {
+export const getOnePortfolioPriceData = (url) => {
     return new Promise((resolve, reject) => {
         fetch(url)
         .then((res) => res.json())
         .then((data) => resolve(data));
     })
+};
+
+export const setPrimaryPortfolio = (url) => {
+  return new Promise((resolve, reject) => {
+      fetch(url)
+      .then((res) => res.json())
+      .then((data) => resolve(data));
+  })
 };
