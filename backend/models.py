@@ -4,6 +4,7 @@ import database as _database
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, sessionmaker
 from database import Base
+from database import engine
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,12 +13,13 @@ class Portfolio(_database.Base):
     __tablename__ = "portfolios"
 
     id = _sql.Column(_sql.Integer, primary_key=True, index=True)
-    growth = _sql.Column(_sql.REAL)
+    # growth = _sql.Column(_sql.REAL)
     date_created = _sql.Column(
         _sql.DateTime, default=_dt.datetime.now())
     date_updated = _sql.Column(_sql.DateTime, default=_dt.datetime.now(
     ), onupdate=_dt.datetime.now())
-    user_id = _sql.Column(_sql.Integer, ForeignKey("users.id"), index=True)  # 追加
+    user_id = _sql.Column(_sql.Integer, ForeignKey(
+        "users.id"), index=True)  # 追加
     is_primary = _sql.Column(_sql.Boolean, default=False)  # 新しいカラム
 
 
@@ -78,7 +80,7 @@ class User(_database.Base):
     email = _sql.Column(_sql.String, unique=True, index=True)
     hashed_password = _sql.Column(String)
     avatar_url = _sql.Column(_sql.String)
-    google_id = _sql.Column(_sql.String, unique=True, index=True)  # Googleから提供される固有のID
+    google_id = _sql.Column(_sql.String, unique=True,
+                            index=True)  # Googleから提供される固有のID
     is_active = _sql.Column(_sql.Boolean(), default=True)
     is_superuser = _sql.Column(_sql.Boolean(), default=False)
-

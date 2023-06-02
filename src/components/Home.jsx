@@ -28,7 +28,7 @@ function Home() {
           <div key={index} className='portfolioCard'>
             <div className='cardHeader'>
               <div className='portfolioRank'>{index + 1}</div>
-              <Link to={`/portfolio/${portfolio.id}`} className='portfolioLink'>
+              <Link to={`/portfolio/${portfolio.id}`} className='portfolioLink' onClick={() => console.log(`Link was clicked with key: ${index}`)}>
                 <div className='portfoliId'>Detail <ArrowCircleRightOutlinedIcon/></div>
               </Link>
             </div>

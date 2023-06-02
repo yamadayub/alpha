@@ -117,14 +117,13 @@ function NewPortfolio() {
 
   return (
     <div className='newPortfolio'>
-      <div className='newPortfolioContainer'>
-
-        <div className='dummyButton'>
-          <button type="button" className='createButton' id="button-A" onClick={clickHandlerA} disabled>
+      <div className='dummyButton'>
+        <button type="button" className='createButton' id="button-A" onClick={clickHandlerA}>
             Dummy Button
-          </button>
-        </div>        
+        </button>
+      </div>
 
+      <div className='newPortfolioContainer'>
         <div>
           {errorMessage && <div className='error-message'>{errorMessage}</div>}
         </div>
@@ -162,11 +161,6 @@ function NewPortfolio() {
           </button>
         </div>
 
-        {/* <div>
-          <button type="button" className='createButton' id="button-B" onClick={clickHandlerC}>
-            Button-C
-          </button>
-        </div> */}
       </div>
 
       <div className="createPortfolioAction">

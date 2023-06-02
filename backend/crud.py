@@ -81,7 +81,7 @@ async def get_all_portfolios(db: Session):
         top_3_tickers = sorted_tickers[:3]
 
         portfolio_detail = models.Portfolio(
-            id=portfolio.id, growth=portfolio.growth, date_created=portfolio.date_created, tickers=top_3_tickers)
+            id=portfolio.id, date_created=portfolio.date_created, tickers=top_3_tickers)
 
         # growthを上書き
         portfolio_detail.growth = utils.setGrowth(portfolio_detail)
@@ -122,7 +122,7 @@ async def get_all_portfolios_by_user_id(db: Session, user_id: int):
         top_3_tickers = sorted_tickers[:3]
 
         portfolio_detail = models.Portfolio(
-            id=portfolio.id, growth=portfolio.growth, date_created=portfolio.date_created, tickers=top_3_tickers, is_primary=portfolio.is_primary)
+            id=portfolio.id, date_created=portfolio.date_created, tickers=top_3_tickers, is_primary=portfolio.is_primary)
 
         # growthを上書き
         portfolio_detail.growth = utils.setGrowth(portfolio_detail)

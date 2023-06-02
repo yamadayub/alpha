@@ -23,22 +23,26 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 # Replace 'your_schema' with the schema you want to use.
-custom_schema = 'public'
-config.set_main_option(
-    'sqlalchemy.url', f"{config.get_main_option('sqlalchemy.url')}?options=-csearch_path={custom_schema}")
 
-print(models)
-print(models.Base.metadata)
+custom_schema = 'public'
+# config.set_main_option(
+#     'sqlalchemy.url', f"{config.get_main_option('sqlalchemy.url')}?options=-csearch_path={custom_schema}")
+
+print("Imported Models: ", models)
+print("MetaData from improted Models: ", models.Base.metadata)
 target_metadata = models.Base.metadata
 target_metadata.schema = custom_schema
 
 # The following line is needed to ensure the schema is used for alembic_version table
+
 metadata = MetaData(schema=custom_schema)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
+url = "postgresql://wizard_app:password@localhost:5432/wizards_database"
 
 
 def run_migrations_offline() -> None:
@@ -53,7 +57,9 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    # url = config.get_main_option("sqlalchemy.url")
+    print(config.get_main_option("sqlalchemy.url"))
+
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -72,19 +78,40 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    # ここがおかしい？
+    # url = config.get_main_option("sqlalchemy.url")
+    print("URL from alembic.ini: ", config.get_main_option("sqlalchemy.url"))
+    print("URL in env.py: ", url)
 
-    print(connectable)
+    connectable = models.engine
+    # connectable = engine_from_config(
+    #     config.get_section(config.config_ini_section, {}),
+    #     prefix="sqlalchemy.",
+    #     poolcnannikalass=pool.NullPool,
+    # )
+
+    # Print out the engine's connection URL
+    print(f"Engine URL: {models.engine.url}")
+
+    print("connectable: ", connectable)
 
     with connectable.connect() as connection:
         with connection.begin():
             connection.execute(text("SET search_path TO public"))
-        context.configure(connection=connection, target_metadata=target_metadata,
-                          version_table_schema=custom_schema, metadata=metadata)
+        context.configure(
+            url=url,
+            connection=connection,
+            target_metadata=target_metadata,
+            version_table_schema=custom_schema,
+            metadata=metadata
+        )
+
+        result = connection.execute(text("SHOW search_path"))
+        for row in result:
+            print(f"Current search path: {row}")
+
+        print("Connection info: ", connection)
+        print("Connection info: ", connection.__dict__)
 
         with context.begin_transaction():
             context.run_migrations()

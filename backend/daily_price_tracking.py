@@ -1,5 +1,7 @@
 import models
 from datetime import datetime, timedelta
+import pytz
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import pandas_datareader.data as pdr
@@ -13,8 +15,9 @@ Session = sessionmaker(bind=engine)
 
 
 def main():
-    start = datetime.today() - timedelta(days=1)
-    end = datetime.today() - timedelta(days=1)
+    jst = pytz.timezone('Asia/Tokyo')
+    start = datetime.now(jst) - timedelta(days=1)
+    end = datetime.now(jst) - timedelta(days=1)
 
     session = Session()
     tickers = session.query(models.TickerMaster.ticker).all()
