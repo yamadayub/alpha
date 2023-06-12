@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { UserContext } from '../utils/UserContext';
 import "./Navbar.css"
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,31 +10,30 @@ const get_user_url = 'http://127.0.0.1:8000/user/me';
 
 function Nabvar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useContext(UserContext);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('access_token');
-      console.log(token)
-      const response = await fetch(get_user_url, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      console.log(response)
-
-      if (response.ok) {
-        const userData = await response.json();
-        console.log("userData:", userData)
-        setUser(userData);
-      } else {
-        console.error('Error fetching user data:', response.status, response.statusText);
-      }
-    };
-
-    fetchUserData();
-  }, []);
+  // const [user, setUser] = useState(null);
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     const token = localStorage.getItem('access_token');
+  //     console.log(token)
+  //     const response = await fetch(get_user_url, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`,
+  //       },
+  //     });
+  //     console.log(response)
+  //     if (response.ok) {
+  //       const userData = await response.json();
+  //       console.log("userData:", userData)
+  //       setUser(userData);
+  //     } else {
+  //       console.error('Error fetching user data:', response.status, response.statusText);
+  //     }
+  //   };
+  //   fetchUserData();
+  // }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -41,6 +41,12 @@ function Nabvar() {
   
   const closeMenu = () => {
     setMenuOpen(false);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('access_token'); // remove the token from local storage
+    setUser(null); // set the user state back to null
+    closeMenu(); // close the menu
   };
 
   return (
@@ -60,31 +66,29 @@ function Nabvar() {
           <Link to="/new" onClick={closeMenu} >
             Add A New Portfolio
           </Link>
-          {!user?
-          <Link to="/sign_up" onClick={closeMenu} >
-            Sign Up
-          </Link>
-          :
-          <></>
-          }
-          {!user?
-          <Link to="/sign_in" onClick={closeMenu} >
-            Sign In
-          </Link>
-          :
-          <></>
-          }
-          {user?
-            <Link to="/my_page" onClick={closeMenu} >
-              My Page
-            </Link> 
-            : 
-            <></>
-          }
+          {user ? (
+            <>
+              <Link to="/my_page" onClick={closeMenu}>
+                My Page
+              </Link>
+              <Link to="/" onClick={logout}>
+                Logout
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/sign_up" onClick={closeMenu}>
+                Sign Up
+              </Link>
+              <Link to="/sign_in" onClick={closeMenu}>
+                Sign In
+              </Link>
+            </>
+          )}
         </div>
       )}
     </nav>
   )
 }
 
-export default Nabvar
+export default Nabvar;

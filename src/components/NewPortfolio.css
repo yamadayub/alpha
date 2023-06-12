@@ -7,7 +7,7 @@
     /* border: solid #777777; */
     height: 90vh;
     overflow-y: scroll; /* 縦スクロールを有効にする */
-    background-color: aqua;
+    background-color: #FFFFFF;
     padding-top: 80px; /* 追加 */
 }
 
@@ -15,11 +15,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(162, 234, 234);
+    background-color: #FFFFFF;
 }
 
 .portfolioContainer{
-    background-color: beige;
+    background-color: #FFFFFF;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -86,7 +86,7 @@
 
 .createPortfolioAction{
     width: 100%;
-    background-color: #b6e6f9;
+    background-color: #FFFFFF;
     color: white;
     height: 70px;
     display: flex;

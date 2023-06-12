@@ -5,7 +5,7 @@ nav {
     height: 70px;
     display: flex;
     align-items: center;
-    position: fixed; /* 追加 */
+    position: sticky; /* 追加 */
     top: 0; /* 追加 */
     z-index: 1000; /* 追加 */
     font-size: 16px;

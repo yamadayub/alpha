@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Avatar } from '@mui/material';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined'
-import { getAllPortfoliosWithUserID } from "../utils/Portfolio"
+import { getAllPortfoliosWithUserID, setPrimaryPortfolio } from "../utils/Portfolio"
 import { Link } from "react-router-dom"
 import './Portfolio.css'
 import './MyPage.css'
@@ -60,8 +60,13 @@ const MyPage = () => {
     setOtherPortfolios(myPortfoliosData.filter(portfolio => !portfolio.is_primary));
   }, [myPortfoliosData]);
 
-  const setPrimaryPortfolio = (portfolio_id, event) => {
+  const setPrimary = async (portfolio_id, event) => {
     console.log(">>>>> Set Primary Button Clicked! <<<<<");
+    let setPrimaryPortfolioURL = `http://127.0.0.1:8000/portfolio/${portfolio_id}/primary/${user.id}`;
+    console.log(setPrimaryPortfolioURL);
+    let res = await setPrimaryPortfolio(setPrimaryPortfolioURL);
+    console.log(res)
+    setMyPortfoliosData(res.portfolios);
   };
 
   if (!user) {
@@ -212,18 +217,19 @@ const MyPage = () => {
         return (
           <div key={index} className='otherPortfolioCard'>
             <div className='cardHeader'>
-              <div
+              <button 
+                type="button" 
                 className="setPrimaryPortfolioButton"
-                id="setPrimaryPortfolioButtonID"
-                onClick={(event) => setPrimaryPortfolio(portfolio.id, event)}
+                id={`setPrimaryPortfolioButton/${portfolio.id}`}
+                onClick={(event) => setPrimary(portfolio.id, event)}
               >
-                Make This Primary
-              </div>
+                Set Primary
+              </button>
 
              
-                <Link to={`/portfolio/${portfolio.id}`} className='portfolioLink'>
-                  <div className='portfoliId'>Detail <ArrowCircleRightOutlinedIcon/></div>
-                </Link>
+              <Link to={`/portfolio/${portfolio.id}`} className='portfolioLink'>
+                <div className='portfoliId'>Detail <ArrowCircleRightOutlinedIcon/></div>
+              </Link>
               
             </div>
             <div className="portfolio_detail">

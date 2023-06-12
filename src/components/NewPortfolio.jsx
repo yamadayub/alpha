@@ -117,11 +117,11 @@ function NewPortfolio() {
 
   return (
     <div className='newPortfolio'>
-      <div className='dummyButton'>
+      {/* <div className='dummyButton'>
         <button type="button" className='createButton' id="button-A" onClick={clickHandlerA}>
             Dummy Button
         </button>
-      </div>
+      </div> */}
 
       <div className='newPortfolioContainer'>
         <div>

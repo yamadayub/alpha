@@ -54,9 +54,9 @@ export const getOnePortfolioPriceData = (url) => {
 };
 
 export const setPrimaryPortfolio = (url) => {
-  return new Promise((resolve, reject) => {
-      fetch(url)
-      .then((res) => res.json())
-      .then((data) => resolve(data));
-  })
+  return axios.post(url)
+  .then((response) => response.data)
+  .catch((error) => {
+    throw new Error(error.message);
+  });
 };

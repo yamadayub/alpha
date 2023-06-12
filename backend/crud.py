@@ -147,7 +147,7 @@ async def get_all_portfolios_by_user_id(db: Session, user_id: int):
 async def create_portfolio(db: Session, portfolio: schemas.PortfolioDetailCreate, user_id: int):
 
     # insert portfolio
-    db_portfolio = models.Portfolio(growth=0.1, user_id=user_id)
+    db_portfolio = models.Portfolio(user_id=user_id)
     db.add(db_portfolio)
     db.flush()  # データベースに保存してidを発行する
     print(db_portfolio)
