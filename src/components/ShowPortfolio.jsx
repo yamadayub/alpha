@@ -3,8 +3,6 @@ import { useParams } from 'react-router-dom';
 import { getOnePortfolio, getOnePortfolioPriceData } from "../utils/Portfolio"
 import Chart from "../utils/Chart"
 import './Portfolio.css'
-import chart from '../assets/chart.jpg'; 
-import pie_chart from '../assets/pie_chart.jpeg'; 
 import { Line } from 'react-chartjs-2';
 import { Link } from 'react-router-dom'
 

@@ -5,23 +5,41 @@
     overflow-y: auto;
     max-height: calc(100vh - 70px); /* 画面の高さからFooterの高さを引く */
     padding-top: 80px;
-  }
-  
-.portfolioCard {
-background-color: #FFFFFF;
-box-shadow: 9px 10px 18px -8px #777777;
-border-radius: 5px;
-width: 100%;
-border: solid 1px;
-margin: 10px;
-pointer-events: none;
+    width: 100%;
+    background-color: #e7efa4;
 }
 
+@media (max-width: 768px) {
+  .portfolioCardContainer {
+    display: block;
+    justify-content: normal;
+  }
+}
+
+  
+  .portfolioCard {
+    background-color: #FFFFFF;
+    box-shadow: 9px 10px 18px -8px #777777;
+    border-radius: 5px;
+    width: 100%;
+    border: solid 1px;
+    pointer-events: none;
+    box-sizing: border-box;
+  }
+  
+  /* 追加: メディアクエリで768px以下の画面幅で適用するスタイルを定義 */
+  @media (max-width: 768px) {
+    .portfolioCard {
+      width: 100%; /* 画面幅に対して90%に設定 */
+    }
+  }
+
 .cardHeader {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px;
+    background-color: #a6a6dc;
 }
 
 .portfolioRank {
@@ -29,8 +47,8 @@ margin-bottom: 0px;
     font-size: 20px;
     background-color: #7474cc;
     color: white;
-    width: 45px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     padding: 5px;
     display: flex;
     align-items: center;
@@ -49,6 +67,8 @@ margin-bottom: 0px;
     display: flex;
     box-sizing: border-box;
     padding: 5px;
+    /* width: 100%; */
+    background-color: #26f3ec;
 }
 
 .portfolioTickers {
@@ -63,20 +83,26 @@ margin-bottom: 0px;
 
 
 .portfolio_performance{
-    width: 100%;
+    width: 50%;
     display: flex;
     flex-direction: column;
+    background-color: #e7efa4;
 }
 
 .portfolioGrowth{
-    height: 25%;
+    height: 30%;
     font-size: 16px;
     font-weight: 500;
+    /* background-color: #7474cc; */
+    display: flex;
+    align-items: center;
 }
 
 .portfolioGrowthTable {
+    height: 100%;
     margin: 0;
     padding: 0;
+    background-color: #fbd8ab;
 }
 
 .ytdPerformance{
@@ -205,6 +231,15 @@ th {
     margin-top: 10px;
 }
 
+.portfolioDetailChartHome{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    width: 100%; /* 必要に応じて適切な値に設定 */
+    height: 100px; /* 必要に応じて適切な値に設定 */   
+}
+
 .chartImage{
     width: 100%;
 }
@@ -226,4 +261,15 @@ th {
     transition: all 0.3s;
     text-align: center;
     margin-top: 20px;
+}
+
+.portfolioDounutChartBox {
+    margin: 0;
+    padding: 5px;
+    background-color: #ebb6f2;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;  
 }
