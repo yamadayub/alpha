@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import SignInForm from './SignInForm';
 import { UserContext } from '../utils/UserContext';
 import { Box, Typography } from '@mui/material';
@@ -9,6 +9,18 @@ const get_user_url = 'http://127.0.0.1:8000/user/me';
 const SignInPage = () => {
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
+  const [vh, setVh] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const resizeListener = () => {
+      setVh(window.innerHeight);
+    };
+    window.addEventListener('resize', resizeListener);
+
+    return () => {
+      window.removeEventListener('resize', resizeListener);
+    };
+  }, []);
   
   const handleSignIn = async (email, password) => {
     console.log('Email:', email, 'Password:', password);
@@ -47,10 +59,12 @@ const SignInPage = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      minHeight="100vh"
+      // backgroundColor="#81c784"
+      height="calc(100vh - 70px - 70px)"
+      flex={1} 
     >
       <Typography variant="h4" mb={2}>Sign In</Typography>
-      <SignInForm onSignIn={handleSignIn} />
+        <SignInForm onSignIn={handleSignIn} />
     </Box>
   );
 };

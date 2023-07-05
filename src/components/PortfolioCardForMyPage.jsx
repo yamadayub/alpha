@@ -6,7 +6,8 @@ import SimpleChart from "../utils/SimpleChart"
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined'
 import './Portfolio.css'
 
-function PortfolioCard({ portfolio, index }) {
+function PortfolioCardForMyPage({ portfolio, index, primary, setPrimary }) {
+    // console.log(setPrimary);
     let getOnePortfolioPriceDataURL = `http://127.0.0.1:8000/portfolio/${portfolio.id}/price_data`
     const [portfolioPerformanceData, setPortfolioPerformanceData] = useState(null);
     const [lineChartData, setLineChartData] = useState(null);
@@ -46,16 +47,20 @@ function PortfolioCard({ portfolio, index }) {
                 backgroundColor: "rgba(75,192,192,0.2)",
                 borderColor: "rgba(75,192,192,1)",
                 borderWidth: 2,
+                pointRadius: 0
                 }
             ]
             };
             setLineChartData(tempChartData);
         }
     fetchData();
+    
+    // ratioでソート
+    portfolio.tickers.sort((a, b) => b.ratio - a.ratio);
+
     },[getOnePortfolioPriceDataURL])
 
-// ratioでソート
-portfolio.tickers.sort((a, b) => b.ratio - a.ratio);
+
 
 const pieChartData = {
     labels: portfolio.tickers.map(t => t.ticker),
@@ -71,12 +76,25 @@ const pieChartData = {
 
   return (
     <div>
-        <div key={index} className='portfolioCard'>
+            <div key={index} className='portfolioCard'>
+ 
             <div className='cardHeader'>
-              <div className='portfolioRank'>{index + 1}</div>
+              {primary? 
+                <div className='portfolioPrimaryTagPrimary'>Primary</div>
+                :
+                <button 
+                    type="button" 
+                    className="setPrimaryPortfolioButton"
+                    id={`setPrimaryPortfolioButton/${portfolio.id}`}
+                    onClick={(event) => setPrimary(portfolio.id, event)}
+                >
+                Set Primary
+                </button>
+              }
+              {/* <div className='portfolioRank'>{index + 1}</div> */}
               {/* <div className='portfolioName'>Portfolio Name</div> */}
               {/* <div className='pmName'>Created by XXX</div> */}
-              <Link to={`/portfolio/${portfolio.id}`} className='portfolioLink' onClick={() => console.log(`Link was clicked with key: ${index}`)}>
+              <Link to={`/portfolio/${portfolio.id}`} className='portfolioLink'>
                 <div className='portfoliId'>Detail <ArrowCircleRightOutlinedIcon/></div>
               </Link>
             </div>
@@ -112,4 +130,4 @@ const pieChartData = {
   )
 }
 
-export default PortfolioCard
+export default PortfolioCardForMyPage

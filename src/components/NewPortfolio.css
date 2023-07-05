@@ -8,7 +8,7 @@
     height: 90vh;
     overflow-y: scroll; /* 縦スクロールを有効にする */
     background-color: #FFFFFF;
-    padding-top: 80px; /* 追加 */
+    /* padding-top: 80px; 追加 */
 }
 
 .newPortfolioContainer{
@@ -113,10 +113,6 @@
 .createPortfolioButton:hover{
     transform: translateY(5px);
     box-shadow: none;
-}
-
-.portfolioDetailContainer{
-    padding-top: 80px; /* 追加 */
 }
 
 .ticker-dropdown {

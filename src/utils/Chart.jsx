@@ -27,7 +27,8 @@ const Chart = ({ chartData }) => {
     const options = {
         plugins:{
             legend: {
-                display: true
+                display: true,
+                position: 'bottom'
             }
         },
         scales: {

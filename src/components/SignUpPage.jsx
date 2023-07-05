@@ -28,7 +28,9 @@ const SignUpPage = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      minHeight="100vh"
+      // backgroundColor="#81c784"
+      height="calc(100vh - 70px - 70px)"
+      flex={1} 
     >
       <Typography variant="h4" mb={2}>Sign Up</Typography>
       <SignUpForm onSignUp={handleSignUp} />

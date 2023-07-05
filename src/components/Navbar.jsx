@@ -53,7 +53,8 @@ function Nabvar() {
     <nav>
       <div className="nav-left">
         <Link to="/">
-          <img src={logo} alt="AlphaMasters Logo" className="logo" />
+          Manee
+          {/* <img src={logo} alt="AlphaMasters Logo" className="logo" /> */}
         </Link>
         <FontAwesomeIcon icon={menuOpen ? faTimes : faBars} onClick={toggleMenu} className="menu-icon" />
       </div>
@@ -72,7 +73,7 @@ function Nabvar() {
                 My Page
               </Link>
               <Link to="/" onClick={logout}>
-                Logout
+                Sign Out
               </Link>
             </>
           ) : (

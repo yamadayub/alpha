@@ -9,3 +9,126 @@
 .tickersToSell{
     margin-bottom: 30px;
 }
+
+.portfolioComparisonWin{
+    font-weight: 500;
+    font-size: 20px;
+    background-color: #0eb980;
+    color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.portfolioComparisonLose{
+    font-weight: 500;
+    font-size: 20px;
+    background-color: #e76d6d;
+    color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+}
+
+.portfolioDetailPerformanceTitle{
+    width: 100%;
+    height: 30px;
+    font-weight: 500;
+    font-size: 20px;
+    background-color: rgb(144, 150, 213);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.portfolioPerformanceDetailTable{
+    width: 100%;
+}
+
+.portfolioPerformanceDetailTableHeader{
+    font-size: 12px;
+    height: 30px;
+}
+
+.portfolioPerformanceDetailTableBodyRow{
+    font-size: 12px;
+    height: 30px;
+}
+
+.portfolioName{
+    text-align: left;
+    padding-left: 5px;
+}
+
+.portfolioPeak{
+    text-align: right;
+    padding-right: 5px;
+}
+
+.portfolioTrough{
+    text-align: right;
+    padding-right: 5px;
+}
+
+.portfolioMaxDrowDown{
+    text-align: right;
+    padding-right: 5px;
+}
+
+.actionsToCopyTitle{
+    width: 100%;
+    height: 30px;
+    font-weight: 500;
+    font-size: 20px;
+    background-color: rgb(144, 150, 213);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.copyActionsTableContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tickersToBuy, .tickersToSell {
+    flex: 1 0 0;
+}
+
+.tickersToBuyTitle{
+    width: 100%;
+    height: 30px;
+    font-weight: 500;
+    font-size: 20px;
+    background-color: #0eb980;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+}
+
+.tickersToSellTitle{
+    width: 100%;
+    height: 30px;
+    font-weight: 500;
+    font-size: 20px;
+    background-color: #e76d6d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+}
+
+.toSellBuyTickerTableHeader{
+    font-size: 12px;
+    height: 30px;
+}
+
+.toSellBuyTickerTableRaw{
+    font-size: 12px;
+    height: 30px;
+}

@@ -32,7 +32,7 @@ const AuthForm = ({ onSubmit, buttonText }) => {
           fullWidth
           margin="normal"
         />
-        <Button variant="contained" color="primary" type="submit">
+        <Button variant="contained" type="submit">
           {buttonText}
         </Button>
       </Box>

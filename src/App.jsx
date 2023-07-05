@@ -43,20 +43,22 @@ function App() {
   }, []);
 
   return (
-    <div style={{ paddingBottom: '70px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingBottom: '70px' }}>
       <Router>
         <UserContext.Provider value={{ user, setUser }}>
           <Nabvar/>
-          <Routes>
-            <Route path="/" element={<Home/>}></Route>
-            <Route path="/new" element={<NewPortfolio/>}></Route>
-            <Route path="/portfolio/:portfolio_id" element={<ShowPortfolio/>}></Route>
-            <Route path="/auth" element={<AuthPage/>}></Route>
-            <Route path="/sign_up" element={<SignUpPage/>}></Route>
-            <Route path="/sign_in" element={<SignInPage/>}></Route>
-            <Route path="/my_page" element={<MyPage/>}></Route>
-            <Route path="/comparison/:portfolio_id" element={<Comparison/>}></Route>
-          </Routes>
+          <div style={{ flex: 1, overflow: 'auto'}}>
+            <Routes>
+              <Route path="/" element={<Home/>}></Route>
+              <Route path="/new" element={<NewPortfolio/>}></Route>
+              <Route path="/portfolio/:portfolio_id" element={<ShowPortfolio/>}></Route>
+              <Route path="/auth" element={<AuthPage/>}></Route>
+              <Route path="/sign_up" element={<SignUpPage/>}></Route>
+              <Route path="/sign_in" element={<SignInPage/>}></Route>
+              <Route path="/my_page" element={<MyPage/>}></Route>
+              <Route path="/comparison/:portfolio_id" element={<Comparison/>}></Route>
+            </Routes>
+          </div>
           <Footer/>
         </UserContext.Provider>
       </Router>

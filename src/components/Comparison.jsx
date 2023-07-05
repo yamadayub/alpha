@@ -95,13 +95,14 @@ function Comparison() {
               labels: priceData.composite_price_by_date.map((data) => data.date),
               datasets: [
                 {
-                  label: `Portfolio ID:${portfolio_id}`,
+                  label: `Target`,
                   data: priceData.composite_price_by_date.map((data) => {
                     return data.composite_price
                   }),
                   backgroundColor: "rgba(75,192,192,0.2)",
                   borderColor: "rgba(75,192,192,1)",
                   borderWidth: 2,
+                  pointRadius: 0
                 },
                 {
                     label: "My Primary",
@@ -111,6 +112,7 @@ function Comparison() {
                     backgroundColor: "rgba(75, 100, 192,0.2)",
                     borderColor: "rgba(75, 100, 192,1)",
                     borderWidth: 2,
+                    pointRadius: 0
                 },
               ]
             };
@@ -141,11 +143,20 @@ function Comparison() {
 
         {/* Performance Table */}
         <div className="portfolioDetailHeader">
-          <div className='portfolioDetailRank'>Return</div>
+
+          {(primaryPortfolio[0].latest_performance > portfolioPerformanceData.latest_performance)?
+            (
+              <div className='portfolioComparisonWin'>Win</div>
+            )
+          :
+            (
+              <div className='portfolioComparisonLose'>Lose</div>
+            )
+          }
           <table className='portfolioDetailGrowthTable'>
             <tbody>
               <tr>
-                <td className='portfolioDetailGrowthHeader'>ID:{portfolio_id}</td>
+                <td className='portfolioDetailGrowthHeader'>Target</td>
                 <td className='portfolioDetailGrowthPerformance'>
                   {portfolioPerformanceData ? (
                     `${new Intl.NumberFormat('ja', 
@@ -175,10 +186,11 @@ function Comparison() {
                 <td className='portfolioDetailGrowthHeader'>Gap</td>
                 <td className='portfolioDetailGrowthPerformance'>
                   {primaryPortfolio ? (
-                    `${new Intl.NumberFormat('ja', 
-                    {style: 'percent',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2}).format(primaryPortfolio[0].latest_performance - portfolioPerformanceData.latest_performance)}`
+                    `${((primaryPortfolio[0].latest_performance - portfolioPerformanceData.latest_performance) * 100).toFixed(2)} pp`
+                    // `${new Intl.NumberFormat('ja', 
+                    // {style: 'percent',
+                    // minimumFractionDigits: 2,
+                    // maximumFractionDigits: 2}).format(primaryPortfolio[0].latest_performance - portfolioPerformanceData.latest_performance)}`
                   ) : (
                     "Loading..."
                   )}
@@ -195,10 +207,10 @@ function Comparison() {
 
         {/* Performance Comparison Table */}
         <div className="portfolioDetailPerformanceDetail">
-            <div className="portfolioDetailPerformanceTitle">Performence</div>
+            <div className="portfolioDetailPerformanceTitle">Details</div>
         <table className='portfolioPerformanceDetailTable'>
           <thead>
-            <tr>
+            <tr className='portfolioPerformanceDetailTableHeader'>
               <th>Portfolio</th>  
               <th>Peak</th>
               <th>Trough</th>
@@ -206,8 +218,8 @@ function Comparison() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><div className="portfolioName">ID:{portfolio_id}</div></td>
+            <tr className='portfolioPerformanceDetailTableBodyRow'>
+              <td><div className="portfolioName">Target</div></td>
               <td>
                 <div className="portfolioPeak">
                 {portfolioPerformanceData ? (
@@ -237,7 +249,7 @@ function Comparison() {
                 )}
               </div></td>
             </tr>
-            <tr>
+            <tr className='portfolioPerformanceDetailTableBodyRow'>
               <td><div className="portfolioName">My Primary</div></td>
               <td>
                 <div className="portfolioPeak">
@@ -268,32 +280,35 @@ function Comparison() {
                 )}
               </div></td>
             </tr>
-            <tr>
+            <tr className='portfolioPerformanceDetailTableBodyRow'>
               <td><div className="portfolioName">Gap</div></td>
               <td>
                 <div className="portfolioPeak">
                 {portfolioPerformanceData ? (
-                  `${new Intl.NumberFormat('ja', {style: 'percent',
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2}).format(primaryPortfolio[0].peak - portfolioPerformanceData.peak)}`
+                  `${((primaryPortfolio[0].peak - portfolioPerformanceData.peak) * 100).toFixed(2)}pp`                  
+                  // `${new Intl.NumberFormat('ja', {style: 'percent',
+                  // minimumFractionDigits: 2,
+                  // maximumFractionDigits: 2}).format(primaryPortfolio[0].peak - portfolioPerformanceData.peak)}`
                 ) : (
                   "Loading..."
                 )}
               </div></td>
               <td><div className="portfolioTrough">
                 {portfolioPerformanceData ? (
-                  `${new Intl.NumberFormat('ja', {style: 'percent',
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2}).format(primaryPortfolio[0].trough - portfolioPerformanceData.trough)}`
+                  `${((primaryPortfolio[0].trough - portfolioPerformanceData.trough) * 100).toFixed(2)}pp`
+                  // `${new Intl.NumberFormat('ja', {style: 'percent',
+                  // minimumFractionDigits: 2,
+                  // maximumFractionDigits: 2}).format(primaryPortfolio[0].trough - portfolioPerformanceData.trough)}`
                 ) : (
                   "Loading..."
                 )}
               </div></td>
               <td><div className="portfolioMaxDrowDown">
                 {portfolioPerformanceData ? (
-                  `${new Intl.NumberFormat('ja', {style: 'percent',
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2}).format(primaryPortfolio[0].max_drow_down - portfolioPerformanceData.max_drow_down)}`
+                  `${((primaryPortfolio[0].max_drow_down - portfolioPerformanceData.max_drow_down) * 100).toFixed(2)}pp`
+                  // `${new Intl.NumberFormat('ja', {style: 'percent',
+                  // minimumFractionDigits: 2,
+                  // maximumFractionDigits: 2}).format(primaryPortfolio[0].max_drow_down - portfolioPerformanceData.max_drow_down)}`
                 ) : (
                   "Loading..."
                 )}
@@ -304,13 +319,14 @@ function Comparison() {
       </div>
 
       <div className="actionsToCopyContainer">
-        <div className="actionsToCopyHeader">To Copy This Portfolio</div>
+        <div className="actionsToCopyTitle">To Copy This Portfolio</div>
+          <div className="copyActionsTableContainer">
             <div className="tickersToBuy">
                 <div className="tickersToBuyTitle">To Buy</div>
-                    <div className="portfolioDetailTickers">
+                    <div className="portfolioDetailTickersInComparison">
                         <table className='portfolioTickerTable'>
                         <thead>
-                            <tr>
+                            <tr className='toSellBuyTickerTableHeader'>
                             <th>#</th>
                             <th>Ticker</th>
                             <th>Units</th>
@@ -321,10 +337,10 @@ function Comparison() {
                             let count = index + 1;
 
                             return (
-                                <tr key={index}>
+                                <tr key={index} className='toSellBuyTickerTableRaw'>
                                     <td>{index + 1}</td>
                                     <td>{item.ticker}</td>
-                                    <td className='ratioText'>
+                                    <td className='unitText'>
                                         +{Math.floor(item.ratio)}
                                     </td>
                                 </tr>
@@ -336,36 +352,35 @@ function Comparison() {
             </div>
             <div className="tickersToSell">
                 <div className="tickersToSellTitle">To Sell</div>
-                    <div className="portfolioDetailTickers">
-                    <table className='portfolioTickerTable'>
-                    <thead>
-                        <tr>
-                        <th>#</th>
-                        <th>Ticker</th>
-                        <th>Units</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {toSell&&toSell.map((item, index) => {
-                        let count = index + 1;
-
-                        return (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{item.ticker}</td>
-                                <td className='ratioText'>
-                                    -{Math.floor(item.ratio)}
-                                </td>
+                    <div className="portfolioDetailTickersInComparison">
+                      <table className='portfolioTickerTable'>
+                        <thead>
+                            <tr className='toSellBuyTickerTableHeader'>
+                            <th>#</th>
+                            <th>Ticker</th>
+                            <th>Units</th>
                             </tr>
-                        );
-                        })}
-                    </tbody>
-                    </table>
-                </div>
-            </div>
+                        </thead>
+                        <tbody>
+                            {toSell&&toSell.map((item, index) => {
+                            let count = index + 1;
 
-      </div>
-
+                            return (
+                                <tr key={index} className='toSellBuyTickerTableRaw'>
+                                    <td>{index + 1}</td>
+                                    <td>{item.ticker}</td>
+                                    <td className='unitText'>
+                                        -{Math.floor(item.ratio)}
+                                    </td>
+                                </tr>
+                            );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
+              </div>
+          </div>
+        </div>
       </div>
     )
 }

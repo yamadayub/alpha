@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { getOnePortfolio, getOnePortfolioPriceData } from "../utils/Portfolio"
 import Chart from "../utils/Chart"
 import './Portfolio.css'
-import { Line } from 'react-chartjs-2';
 import { Link } from 'react-router-dom'
+import DoughnutChart from "../utils/DoughnutChart"
 
 const get_user_url = 'http://127.0.0.1:8000/user/me';
 
@@ -15,8 +15,29 @@ function ShowPortfolio() {
   const [portfolioData, setPortfolioData] = useState(null);
   const [portfolioPerformanceData, setPortfolioPerformanceData] = useState(null);
   const [chartData, setChartData] = useState(null);
+  const [pieChartData, setPieChartData] = useState(null);
   const [user, setUser] = useState(null);
-  
+
+  const chartBGColors = [
+    'rgb(255, 26, 104, 0.1)',
+    'rgb(54, 162, 235, 0.1)',
+    'rgb(255, 206, 86, 0.1)',
+    'rgb(75, 192, 192, 0.1)',
+    'rgb(153, 102, 255, 0.1)',
+    'rgb(255, 159, 64, 0.1)',
+    'rgb(0, 0, 0, 0.2)'
+    ];
+
+const chartBorderColors = [
+    'rgb(255, 26, 104, 1)',
+    'rgb(54, 162, 235, 1)',
+    'rgb(255, 206, 86, 1)',
+    'rgb(75, 192, 192, 1)',
+    'rgb(153, 102, 255, 1)',
+    'rgb(255, 159, 64, 1)',
+    'rgb(0, 0, 0, 1)'
+    ];
+
   useEffect(()=>{   
     const fetchData = async () => {
       let portfolio_data = await getOnePortfolio(getOnePortfolioURL);  
@@ -41,16 +62,30 @@ function ShowPortfolio() {
       };
       
       setChartData(tempChartData);
+
+
+
     }
 
     fetchData();
   },[getOnePortfolioURL, getOnePortfolioPriceDataURL])
 
   useEffect(() => {
-    if (portfolioPerformanceData) {
-      console.log(portfolioPerformanceData);
+    if (portfolioData) {
+      const tempPieChartData = {
+        labels: portfolioData.tickers.map(t => t.ticker),
+        datasets: [{
+            labels: portfolioData.tickers.map(t => t.ticker),
+            data: portfolioData.tickers.map(t => t.ratio),
+            backgroundColor: portfolioData.tickers.map((t, index) => chartBGColors[index % chartBGColors.length]),
+            borderColor: portfolioData.tickers.map((t, index) => chartBorderColors[index % chartBorderColors.length]),
+            hoverOffset: 4,
+            borderWidth: 1
+        }]
+      };
+      setPieChartData(tempPieChartData);
     }
-  }, [portfolioPerformanceData]);
+  }, [portfolioData]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -75,6 +110,8 @@ function ShowPortfolio() {
 
     fetchUserData();
   }, []);
+
+
 
   if (!portfolioData) {
     return <div>Loading...</div>
@@ -160,13 +197,28 @@ function ShowPortfolio() {
         </table>     
       </div>
 
+
+
+      {user?
+        <Link to={`/comparison/${portfolio_id}`}>
+          <div className="compareButton">Compare with my portfolio</div>
+        </Link>
+        : 
+        <></>
+      }
+
+      <div className="doughnutChartContainer">
+        <div className="portfolioDounutChartBoxInPortfolioDetail">
+          <DoughnutChart chartData={pieChartData} />
+        </div>
+      </div>
       <div className="portfolioDetailTickers">
         <table className='portfolioTickerTable'>
           <thead>
             <tr>
               <th>#</th>
               <th>Ticker</th>
-              <th>Ratio</th>
+              <th>Quantity</th>
             </tr>
           </thead>
           <tbody>
@@ -186,15 +238,6 @@ function ShowPortfolio() {
           </tbody>
         </table>
       </div>
-
-      {user?
-        <Link to={`/comparison/${portfolio_id}`}>
-          <div className="compareButton">Compare with my portfolio</div>
-        </Link>
-        : 
-        <></>
-      }
-
     </div>
   )
 }

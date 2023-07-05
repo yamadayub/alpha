@@ -26,7 +26,7 @@ const DoughnutChart = ({ chartData }) => {
             position: 'top',
           },
           title: {
-            display: true,
+            display: false,
           },
           datalabels: {
             formatter: ((context, args) => {
