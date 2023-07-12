@@ -5,6 +5,7 @@ import Chart from "../utils/Chart"
 import './Portfolio.css'
 import { Link } from 'react-router-dom'
 import DoughnutChart from "../utils/DoughnutChart"
+import './Comparison.css'
 
 const get_user_url = 'http://127.0.0.1:8000/user/me';
 
@@ -50,13 +51,14 @@ const chartBorderColors = [
         labels: priceData.composite_price_by_date.map((data) => data.date),
         datasets: [
           {
-            label: "Composite Price",
+            label: "Value Index",
             data: priceData.composite_price_by_date.map((data) => {
               return data.composite_price
             }),
             backgroundColor: "rgba(75,192,192,0.2)",
             borderColor: "rgba(75,192,192,1)",
             borderWidth: 2,
+            pointRadius: 0
           }
         ]
       };
@@ -151,14 +153,14 @@ const chartBorderColors = [
       <div className="portfolioDetailPerformanceDetail">
         <table className='portfolioPerformanceDetailTable'>
           <thead>
-            <tr>
+            <tr className='portfolioPerformanceDetailTableHeader'>
               <th>Peak</th>
               <th>Trough</th>
-              <th>Max Drowdown</th>
+              <th>Maximum Drowdown</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr className='portfolioPerformanceDetailTableBodyRow'>
               <td><div className="portfolioPeak">
                 {portfolioPerformanceData ? (
               // Replace 'YOUR_FIELD' with the actual field name from portfolioPerformanceData you want to display
